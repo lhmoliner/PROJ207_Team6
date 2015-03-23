@@ -10,7 +10,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name" >
@@ -21,6 +20,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activity_agents"
+            android:label="@string/title_activity_activity_agents"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sait.team6.travelexperts.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
