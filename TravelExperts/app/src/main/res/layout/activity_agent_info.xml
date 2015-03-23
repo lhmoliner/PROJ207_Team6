@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="#50ffffff"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:id="@+id/profileImage"
+                android:src="@mipmap/p3"
+                android:layout_gravity="center_horizontal|right"
+                android:contentDescription="image_of_agent"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/nameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="10dp"
+                android:gravity="right"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:id="@+id/idLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_secondary"
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="left"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+
+            <TextView
+                android:id="@+id/phoneLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_description"
+                android:textSize="17sp"
+                android:textColor="#ffffffff"
+                android:gravity="left"
+                android:longClickable="false"
+                android:linksClickable="false"
+                android:autoLink="phone"
+                android:textColorLink="#80ffffff"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:id="@+id/emailLabel"
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="left"
+                android:autoLink="email"
+                android:textColorLink="#80ffffff"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/position"
+                android:id="@+id/positionLabel"
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="left"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/agency"
+                android:id="@+id/agencyIdLabel"
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="left"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
