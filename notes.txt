@@ -1,0 +1,10 @@
+
+To identify contribution to the project 
+
+/*
+ * Project Workshop CMPP264 Java - Team 6
+ * Instructor: Harvey Peters
+ * Created by:
+ * Date: March/23/2015
+ *
+ */
