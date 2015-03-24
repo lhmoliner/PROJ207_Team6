@@ -7,19 +7,19 @@ import android.view.MenuItem;
 
 import com.sait.team6.travelexperts.R;
 
-public class PackageActivity extends ActionBarActivity {
+public class ProductsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_package);
+        setContentView(R.layout.activity_products);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_package, menu);
+        getMenuInflater().inflate(R.menu.menu_products, menu);
         return true;
     }
 

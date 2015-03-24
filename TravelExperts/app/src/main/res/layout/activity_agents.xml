@@ -1,19 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:padding="30dp"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="#000000">
 
     <EditText
+        android:id="@+id/agentsTitleLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/agentsTitleLabel"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/agents_title"/>
+        android:background="#50ffffff"
+        android:padding="7dp"
+        android:text="@string/items_title"
+        android:textSize="22sp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:gravity="right"/>
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/agentsListView"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:dividerHeight="2dp"
+        android:layout_marginTop="10dp"/>
 </LinearLayout>

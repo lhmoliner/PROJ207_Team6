@@ -1,11 +1,15 @@
 package com.sait.team6.travelexperts.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 
 import com.sait.team6.travelexperts.R;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -14,6 +18,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.inject(this);
     }
 
 
@@ -24,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -37,5 +43,33 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }*/
+
+    @OnClick(R.id.agentButton)
+    public void startHourlyActivity(View view) {
+        Intent intent = new Intent(this, AgentsActivity.class);
+        //intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.customerButton)
+    public void startCustomerActivity(View view) {
+        Intent intent = new Intent(this, CustomersActivity.class);
+        //intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.packageButton)
+    public void startPackageActivity(View view) {
+        Intent intent = new Intent(this, PackagesActivity.class);
+        //intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.productButton)
+    public void startProductActivity(View view) {
+        Intent intent = new Intent(this, ProductsActivity.class);
+        //intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
     }
 }

@@ -1,24 +1,25 @@
-package com.sait.team6.travelexperts;
+package com.sait.team6.travelexperts.ui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.sait.team6.travelexperts.R;
 
-public class activity_agents extends ActionBarActivity {
+public class PackagesActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agents);
+        setContentView(R.layout.activity_packages);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_activity_agents, menu);
+        getMenuInflater().inflate(R.menu.menu_packages, menu);
         return true;
     }
 
