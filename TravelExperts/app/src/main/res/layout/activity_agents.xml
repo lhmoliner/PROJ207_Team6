@@ -16,7 +16,10 @@
         android:textSize="22sp"
         android:textColor="#ffffff"
         android:textStyle="bold"
-        android:gravity="right"/>
+        android:gravity="right"
+        android:focusable="false"
+        android:editable="false"
+        android:enabled="false"/>
 
     <ListView
         android:id="@+id/agentsListView"
