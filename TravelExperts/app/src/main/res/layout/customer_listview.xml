@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:background="#000000">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:background="#50ffffff"
+        android:paddingLeft="30dp">
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/profileImage"
+        android:src="@mipmap/c1"
+        android:paddingLeft="0dp"
+        android:padding="0dp"
+        android:paddingTop="0dp"
+        android:paddingRight="0dp"
+        android:layout_marginLeft="2dp"
+        android:contentDescription="Customer Small Image"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="100">
+
+        <TextView
+            android:id="@+id/positionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="Customer ID:"
+            android:textSize="15sp"
+            android:textColor="#90ffffff"
+            />
+
+        <TextView
+            android:id="@+id/agentNameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:text="Customer Name:"
+            android:textColor="#90ffffff"
+            android:textSize="20sp"
+            android:paddingTop="0dp"
+            android:layout_marginRight="30dp"/>
+    </LinearLayout>
+
+</LinearLayout>
