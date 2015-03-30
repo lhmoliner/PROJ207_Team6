@@ -200,6 +200,7 @@ public class CustomerDB {
             }
         }
     }
+/*
 
     public long insertCustomer(Customer customer) {
         ContentValues cv = new ContentValues();
@@ -252,5 +253,6 @@ public class CustomerDB {
 
         return rowCount;
     }
+*/
 
 }
