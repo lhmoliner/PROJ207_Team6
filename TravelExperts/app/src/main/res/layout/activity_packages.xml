@@ -1,16 +1,215 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.sait.team6.travelexperts.ui.PackagesActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
-    <TextView
-        android:text="packages"
+    tools:context="com.sait.team6.travelexperts.ui.PackageActivity"
+    android:id="@+id/pkg">
+
+
+    <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/PackageSelection"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="Package Selection"
+        android:textAlignment="center"
+        android:textColor="#ff03070b"
+        android:textSize="30dp"
+        android:background="#ff44ebff"
+        android:gravity="center"/>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pkgDisplay"
+        android:layout_alignRight="@+id/PackageSelection"
+        android:layout_alignEnd="@+id/PackageSelection"
+        android:layout_below="@+id/PackageSelection"
+        android:background="@android:color/holo_blue_light"
+        android:shrinkColumns="*" android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/tbRow1">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/IndiaImage"
+                    android:src="@mipmap/pkg1"
+                    android:layout_gravity="center_horizontal|left"
+                    android:contentDescription="image_of_pkg1"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pkgDescription"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="India Travel Package"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/button1"
+                    android:text="Click Here"
+                    android:layout_column="13"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"/>
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/ParisImage"
+                    android:src="@mipmap/pkg2"
+                    android:layout_gravity="center_horizontal|left"
+                    android:contentDescription="image_of_pkg2"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pkgDescription2"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Paris Travel Package"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/button2"
+                    android:text="Click Here"
+                    android:layout_column="13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"/>
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/AlbertaImage"
+                    android:src="@mipmap/pkg3"
+                    android:layout_gravity="center_horizontal|left"
+                    android:contentDescription="image_of_pkg3"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pkgDescription3"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Alberta Travel Package"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/button3"
+                    android:text="Click Here"
+                    android:layout_column="13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"/>
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/NewYorkImage"
+                    android:src="@mipmap/pkg4"
+                    android:layout_gravity="center_horizontal|left"
+                    android:contentDescription="image_of_pkg4"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pkgDescription4"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="NewYork Travel Package"
+                    android:padding="20dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/button4"
+                    android:text="Click Here"
+                    android:layout_column="13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"/>
+            </LinearLayout>
+        </TableRow>
+
+
+    </TableLayout>
 </RelativeLayout>
+
