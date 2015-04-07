@@ -56,7 +56,7 @@
    		</div>
      		
       		<div id="agents" class="collapse" style="background-color: #00FFFF; border-radius:10px;">
-			      <form class="form-signin" action="agentinfo.jsp">
+			      <form class="form-signin" action="agentInfo.jsp">
 			        <h2 class="form-signin-heading">Please sign in</h2>
 			        <label for="inputEmail" class="sr-only">Email address</label>
 			        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
