@@ -25,6 +25,12 @@
    </form>
 
       <div id="txtHint"><b>Customer info will be listed here.</b></div>
+      
+   <footer class="footer">
+	      <div class="container">
+	        <p class="text-muted">All rights reserved by Travel Experts - 2015</p>
+	      </div>
+	    </footer>
 
 </body>
 </html>

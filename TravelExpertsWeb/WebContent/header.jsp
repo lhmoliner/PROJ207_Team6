@@ -1,70 +1,114 @@
 <!DOCTYPE html>
+<!-- saved from url=(0057)http://getbootstrap.com/2.3.2/examples/justified-nav.html -->
 <html lang="en">
-  <head>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Template · Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <title>Welcome to Travel Experts</title>
+    <!-- Le styles -->
+    <link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 60px;
+      }
 
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      /* Custom container */
+      .container {
+        margin: 0 auto;
+        max-width: 1000px;
+      }
+      .container > hr {
+        margin: 60px 0;
+      }
 
-    <!-- Custom styles for this template -->
-    <link href="bootstrap/css/sticky-footer-navbar.css" rel="stylesheet">
-    <link href="bootstrap/css/signin.css" rel="stylesheet">
-    
-    <!-- Just for debugging purposes -->
-    <script src="bootstrap/js/ie-emulation-modes-warning.js"></script>
-  </head>
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 80px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 100px;
+        line-height: 1;
+      }
+      .jumbotron .lead {
+        font-size: 24px;
+        line-height: 1.25;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
 
-  <body>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Travel Experts</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav"> 
-            <li class="active"><a href="#">Logout</a></li>
-            <li><a href="about.jsp">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
 
-    <!-- Begin page content -->
-    <div class="container">
-    </div>
 
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">All rights reserved by Travel Experts - 2015</p>
-      </div>
-    </footer>
-</head>
-	
+      /* Customize the navbar links to be fill the entire space of the .navbar */
+      .navbar .navbar-inner {
+        padding: 0;
+      }
+      .navbar .nav {
+        margin: 0;
+        display: table;
+        width: 100%;
+      }
+      .navbar .nav li {
+        display: table-cell;
+        width: 1%;
+        float: none;
+      }
+      .navbar .nav li a {
+        font-weight: bold;
+        text-align: center;
+        border-left: 1px solid rgba(255,255,255,.75);
+        border-right: 1px solid rgba(0,0,0,.1);
+      }
+      .navbar .nav li:first-child a {
+        border-left: 0;
+        border-radius: 3px 0 0 3px;
+      }
+      .navbar .nav li:last-child a {
+        border-right: 0;
+        border-radius: 0 3px 3px 0;
+      }
+    </style>
+    <link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="http://getbootstrap.com/2.3.2/assets/ico/favicon.png">
+    </head>
+
+    <body>
+	    <div class="container">
+	      <div class="masthead">
+	        <h3 class="muted">Travel Experts</h3>
+	        <div class="navbar">
+	          <div class="navbar-inner">
+	            <div class="container">
+	              <ul class="nav">
+	                <li class="active"><a href="http://getbootstrap.com/2.3.2/examples/justified-nav.html#">Home</a></li>                
+	                <li><a href="underConstruction.html">Print</a></li>
+	                <li><a href="about.jsp">About</a></li>
+	                <li><a href="contact.jsp">Contact</a></li>
+	                <li><a href="http://getbootstrap.com/2.3.2/examples/justified-nav.html#">Logout</a></li>
+	              </ul>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+     	</div>
+	</body>
+     
