@@ -1,6 +1,7 @@
 package ui;
 /* 
- * Coded by:= Joel D'Arnot + Megha Patel
+ * Coded by:= Joel D'Arnot
+ * ID:000531776
  *
  * */
 import java.awt.Color;
@@ -43,11 +44,13 @@ public class AgentFrame extends JFrame {
 	public static JTextField txtEmail;
 	private static JButton btnEdit;
 	private static JButton btnAdd;
-	public static JComboBox<String> cbAgencyID;
 	public static JComboBox<String> cbAgent;
+	public static JComboBox<String> cbAgencyID;
 	private static JButton btnSave;
+	private static JButton btnCancel;
 	public static String firstName;
 	public static String lastName;
+	public static String agencyId;
 	public static JTextField txtPosition;
 	private static String fullName;
 	private static ResultSet rs;
@@ -103,10 +106,34 @@ public class AgentFrame extends JFrame {
 			System.out.println(ex);
 		}
 		
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+			Properties info = new Properties();
+			info.put("user", "root");// set username
+			info.put("password", ""); //set password
+			
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //get connection using connection path
+			Statement stmt = conn.createStatement(); 
+			rs = stmt.executeQuery("SELECT DISTINCT * FROM agencies"); //load agent table from the database
+			//load agencyId into combobox
+			while (rs.next())
+			{
+				agencyId = rs.getString("AGENCYID"); 				
+				cbAgencyID.addItem(agencyId);			
+			}
+			agencyId = (String)cbAgencyID.getSelectedItem();
+		} catch (ClassNotFoundException | SQLException ex) 
+		{
+			// TODO Auto-generated catch block
+			System.out.println(ex);
+		}
+		
 		//btnLoad.setEnabled(false);
+		btnCancel.setVisible(false);
 		btnEdit.setEnabled(true);
 		cbAgent.setEnabled(true);
-	//	cbAgencyID.setEnabled(false); //disable agencyid combobox (enable later to add)
+		cbAgencyID.setVisible(false); //disable agencyid combobox (enable later to add)
 	
 	}
 	/**
@@ -205,19 +232,18 @@ public class AgentFrame extends JFrame {
 							
 							Statement st;
 							Vector data = new Vector();
-
 							Vector columnNames = new Vector();
-							columnNames.addElement("Products Name");
-							columnNames.addElement("Supplier Name");
+							columnNames.addElement("Agent ID");
+							columnNames.addElement("First Name");
+							columnNames.addElement("Last Name");
 							table = new JTable(data,columnNames);
-							
 							scrollPane.setViewportView(table);						
 							st = conn.createStatement();
-							
+							String getAgent = txtAgentID.getText();
 						    ResultSet res = st.executeQuery("SELECT Agents.AGENTID, Customers.CUSTFIRSTNAME, Customers.CUSTLASTNAME "
 						    							+"	FROM Agents "
 						    							+"	INNER JOIN Customers "
-						    							+"	ON Agents.AGENTID=Customers.AGENTID;"); 
+						    							+"	ON Agents.AGENTID=Customers.AGENTID where Agents.AGENTID='"+getAgent+"';"); 
 						    ResultSetMetaData metaData = res.getMetaData();
 						    int columns = metaData.getColumnCount();
 						    while (res.next()) {
@@ -234,6 +260,7 @@ public class AgentFrame extends JFrame {
 				{
 					// TODO Auto-generated catch block
 					System.out.println(e1);
+					e1.printStackTrace();
 				}
 				
 			}
@@ -253,8 +280,12 @@ public class AgentFrame extends JFrame {
 				txtPhone.setEnabled(true);
 				txtEmail.setEnabled(true);
 				txtPosition.setEnabled(true);
-			//	cbAgencyID.setEnabled(true);
+				cbAgencyID.setVisible(true);
 				btnSave.setEnabled(true);
+				btnCancel.setVisible(true);
+				btnEdit.setVisible(false);
+				txtAgencyID.setVisible(false);
+				
 			}
 		});
 		btnEdit.setEnabled(false);
@@ -340,6 +371,8 @@ public class AgentFrame extends JFrame {
 				txtEmail.setEnabled(false);
 				txtPosition.setEnabled(false);
 				btnSave.setEnabled(false);
+				cbAgencyID.setVisible(false);
+				txtAgencyID.setVisible(true);
 			}
 		});
 		btnSave.setEnabled(false);
@@ -364,15 +397,11 @@ public class AgentFrame extends JFrame {
 		contentPane.add(txtPosition);
 		txtPosition.setColumns(10);
 		
-		JButton btnAdd = new JButton("Add");
+		btnAdd = new JButton("Add");
 		btnAdd.setForeground(new Color(165, 42, 42));
-		btnAdd.setEnabled(false);
+		btnAdd.setEnabled(true);
 		btnAdd.setBounds(208, 402, 75, 25);
 		contentPane.add(btnAdd);
-		
-		JComboBox cbAgencyID = new JComboBox();
-		cbAgencyID.setBounds(300, 355, 74, 22);
-		contentPane.add(cbAgencyID);
 		
 		txtAgencyID = new JTextField();
 		txtAgencyID.setEnabled(false);
@@ -381,54 +410,45 @@ public class AgentFrame extends JFrame {
 		txtAgencyID.setBounds(207, 355, 74, 19);
 		contentPane.add(txtAgencyID);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(482, 16, 308, 411);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(482, 36, 308, 391);
 		contentPane.add(scrollPane);
+		
+		cbAgencyID = new JComboBox();
+		cbAgencyID.setBounds(207, 355, 74, 22);
+		contentPane.add(cbAgencyID);
+		
+		JLabel lblCustomers = new JLabel("Customers");
+		lblCustomers.setBounds(609, 16, 85, 16);
+		lblCustomers.setForeground(new Color(165, 42, 42));
+		contentPane.add(lblCustomers);
+		
+		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnEdit.setVisible(true);
+				cbAgencyID.setVisible(false);
+				txtAgencyID.setVisible(true);
+			}
+		});
+		btnCancel.setForeground(new Color(165, 42, 42));
+		btnCancel.setEnabled(true);
+		btnCancel.setBounds(395, 402, 75, 25);
+		contentPane.add(btnCancel);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				txtFirstName.setEnabled(true); //enabling the text fields to do add
+				
+				new NewAgentForm().setVisible(true); // load NewAgentForm when btnAdd is pressed
+				
+				// testing code
+/*				txtFirstName.setEnabled(true); //enabling the text fields to do add
 				txtMiddle.setEnabled(true);
 				txtLastName.setEnabled(true);
 				txtPhone.setEnabled(true);
 				txtEmail.setEnabled(true);
 				btnSave.setEnabled(true); //enabling SAVE button after edit
-				
-				try
-				{
-					Class.forName("com.mysql.jdbc.Driver"); //MySql driver
-					
-					Properties info = new Properties();
-					info.put("user", "root");
-					info.put("password", "");
-					
-					Connection conn = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
-					
-					String inagtFirstName = txtFirstName.getText();
-					String inagtMiddle = txtMiddle.getText();
-					String inagtLastName = txtLastName.getText();
-					String inagtBusPhone = txtPhone.getText();
-					String inagtEmail = txtEmail.getText();
-					String inagtPosition =txtPosition.getText();
-					String inAgencyID = (String)cbAgencyID.getSelectedItem();
-					
-					//insert agent using insertquery
-					String insertQuery =  ("insert into agents (AGTFIRSTNAME, AGTMIDDLEINITIAL, AGTLASTNAME, AGTBUSPHONE, AGTEMAIL, AGTPOSITION, AGENCYID)"
-							+ " values ('"+inagtFirstName+"','"+inagtMiddle+"','"+inagtLastName+"','"+inagtBusPhone+"','"+inagtEmail+"','"+inagtPosition+"','"+inAgencyID+"')");
-					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-					
-					
-					
-					pstmt.executeUpdate();
-					JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
-					pstmt.close();
-					
-				}catch (Exception ex)
-				{
-					System.out.println(ex);
-				}
-				
-				
+*/				
+
 				
 			}
 		});

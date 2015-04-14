@@ -7,13 +7,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import java.awt.Color;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
 
 public class NewAgentForm extends JFrame {
 
@@ -22,10 +33,13 @@ public class NewAgentForm extends JFrame {
 	private JTextField txtNewMiddle;
 	private JTextField txtNewLastName;
 	private JTextField txtNewPhone;
-	private JTextField txtNewEmal;
+	private JTextField txtNewEmail;
 	private JTextField txtNewPosition;
 	private static JButton btnSave;
 	private static JButton btnCancel;
+	public static JComboBox<String> cbAgencyID;
+	private static ResultSet rs;
+	private static String agencyId;
 
 	/**
 	 * Launch the application.
@@ -34,6 +48,7 @@ public class NewAgentForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					LoadData();
 					NewAgentForm frame = new NewAgentForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -41,6 +56,34 @@ public class NewAgentForm extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public static void LoadData()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+			Properties info = new Properties();
+			info.put("user", "root");// set username
+			info.put("password", ""); //set password
+			
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //get connection using connection path
+			Statement stmt = conn.createStatement(); 
+			rs = stmt.executeQuery("SELECT DISTINCT * FROM agencies"); //load agent table from the database
+			//load agencyId into combobox
+			while (rs.next())
+			{
+				agencyId = rs.getString("AGENCYID"); 				
+				cbAgencyID.addItem(agencyId);			
+			}
+			agencyId = (String)cbAgencyID.getSelectedItem();
+		} catch (ClassNotFoundException | SQLException ex) 
+		{
+			// TODO Auto-generated catch block
+			System.out.println(ex);
+		}
+	//	cbAgencyID.setEnabled(false); //disable agencyid combobox (enable later to add)
+	
 	}
 
 	/**
@@ -86,14 +129,15 @@ public class NewAgentForm extends JFrame {
 		lblAgentEmail.setBounds(12, 181, 137, 26);
 		panel.add(lblAgentEmail);
 		
-		JButton btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0); // close new agent form
+				
+				NewAgentForm.this.dispose(); // close new agent form
 			}
 		});
 		btnCancel.setForeground(new Color(165, 42, 42));
-		btnCancel.setEnabled(false);
+		btnCancel.setEnabled(true);
 		btnCancel.setBounds(387, 299, 75, 25);
 		panel.add(btnCancel);
 		
@@ -117,16 +161,55 @@ public class NewAgentForm extends JFrame {
 		txtNewPhone.setBounds(196, 138, 254, 19);
 		panel.add(txtNewPhone);
 		
-		txtNewEmal = new JTextField();
-		txtNewEmal.setColumns(10);
-		txtNewEmal.setBounds(196, 179, 254, 19);
-		panel.add(txtNewEmal);
+		txtNewEmail = new JTextField();
+		txtNewEmail.setColumns(10);
+		txtNewEmail.setBounds(196, 179, 254, 19);
+		panel.add(txtNewEmail);
 		
-		JButton button_1 = new JButton("Save");
-		button_1.setForeground(new Color(165, 42, 42));
-		button_1.setEnabled(false);
-		button_1.setBounds(300, 299, 75, 25);
-		panel.add(button_1);
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try
+				{
+					Class.forName("com.mysql.jdbc.Driver"); //MySql driver
+					
+					Properties info = new Properties();
+					info.put("user", "root");
+					info.put("password", "");
+					
+					Connection conn = 
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
+					
+					String inagtFirstName = txtNewFirstName.getText();
+					String inagtMiddle = txtNewMiddle.getText();
+					String inagtLastName = txtNewLastName.getText();
+					String inagtBusPhone = txtNewPhone.getText();
+					String inagtEmail = txtNewEmail.getText();
+					String inagtPosition =txtNewPosition.getText();
+					String inAgencyID = (String)cbAgencyID.getSelectedItem();
+					
+					//insert agent using insertquery
+					String insertQuery =  ("insert into agents (AGTFIRSTNAME, AGTMIDDLEINITIAL, AGTLASTNAME, AGTBUSPHONE, AGTEMAIL, AGTPOSITION, AGENCYID)"
+							+ " values ('"+inagtFirstName+"','"+inagtMiddle+"','"+inagtLastName+"','"+inagtBusPhone+"','"+inagtEmail+"','"+inagtPosition+"','"+inAgencyID+"')");
+					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+					
+					
+					
+					pstmt.executeUpdate();
+					JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
+					pstmt.close();
+					
+				}catch (Exception ex)
+				{
+					System.out.println(ex);
+				}
+			}
+		});
+		btnSave.setForeground(new Color(165, 42, 42));
+		btnSave.setEnabled(true);
+		btnSave.setBounds(300, 299, 75, 25);
+		panel.add(btnSave);
 		
 		JLabel label_7 = new JLabel("Agency ID");
 		label_7.setForeground(new Color(165, 42, 42));
@@ -143,8 +226,8 @@ public class NewAgentForm extends JFrame {
 		txtNewPosition.setBounds(196, 220, 180, 19);
 		panel.add(txtNewPosition);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(196, 265, 74, 22);
-		panel.add(comboBox_1);
+		cbAgencyID = new JComboBox();
+		cbAgencyID.setBounds(196, 265, 74, 22);
+		panel.add(cbAgencyID);
 	}
 }
