@@ -1,0 +1,47 @@
+public static void getAgents()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
+			Properties info = new Properties();
+			info.put("user", "root");// set username
+			info.put("password", ""); //set password
+			
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","ICTOOSD", "ICTOOSD"); 
+			Statement stmt = conn.createStatement();
+			ResultSet res = stmt.executeQuery("SELECT AGENTID AGTFIRSTNAME, AGTLASTNAME FROM AGENTS WHERE ACTIVE=1"); 
+			JTable table = new JTable(buildTableModel(res));
+			JOptionPane.showMessageDialog(null, new JScrollPane(table));
+			
+		} catch (ClassNotFoundException | SQLException ex) 
+		{
+			System.out.println(ex);
+			System.out.println("Exception");
+		}
+	}
+	
+	public static DefaultTableModel buildTableModel(ResultSet rs)
+	        throws SQLException {
+
+	    ResultSetMetaData metaData = rs.getMetaData();
+
+	    // names of columns
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();
+	    for (int column = 1; column <= columnCount; column++) {
+	        columnNames.add(metaData.getColumnName(column));
+	    }
+
+	    // data of the table
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+
+	    return new DefaultTableModel(data, columnNames);
+
+	}
