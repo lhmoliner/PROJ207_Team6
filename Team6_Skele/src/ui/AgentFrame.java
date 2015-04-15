@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 //Class start from here
 public class AgentFrame extends JFrame {
@@ -46,6 +48,7 @@ public class AgentFrame extends JFrame {
 	private static JButton btnAdd;
 	public static JComboBox<String> cbAgent;
 	public static JComboBox<String> cbAgencyID;
+	public static JComboBox<String> cbStatus;
 	private static JButton btnSave;
 	private static JButton btnCancel;
 	public static String firstName;
@@ -57,6 +60,7 @@ public class AgentFrame extends JFrame {
 	private JTextField txtAgencyID;
 	private JTable table;
 	private JScrollPane scrollPane;
+	private static String status[];
 	/**
 	 * Launch the application.
 	 */
@@ -69,6 +73,14 @@ public class AgentFrame extends JFrame {
 					//method call when application is run
 					LoadData();
 					frame.setVisible(true);
+					txtFirstName.setEnabled(false);
+					txtMiddle.setEnabled(false);
+					txtLastName.setEnabled(false);
+					txtPhone.setEnabled(false);
+					txtEmail.setEnabled(false);
+					txtPosition.setEnabled(false);
+					
+					
 				
 				}
 				 catch (Exception e) {
@@ -80,9 +92,9 @@ public class AgentFrame extends JFrame {
 	//Dispaly data into ComboBox when load the application 
 	public static void LoadData()
 	{
-		try 
+		try
 		{
-			Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 			Properties info = new Properties();
 			info.put("user", "root");// set username
 			info.put("password", ""); //set password
@@ -94,7 +106,6 @@ public class AgentFrame extends JFrame {
 			while (rs.next())
 			{
 				firstName = rs.getString("AGTFIRSTNAME"); 
-				//System.out.println(firstName);
 				lastName = rs.getString ("AGTLASTNAME");
 				fullName = firstName +" "+ lastName;
 				cbAgent.addItem(fullName);			
@@ -108,7 +119,7 @@ public class AgentFrame extends JFrame {
 		
 		try
 		{
-			Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 			Properties info = new Properties();
 			info.put("user", "root");// set username
 			info.put("password", ""); //set password
@@ -196,12 +207,12 @@ public class AgentFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try
 				{
-					Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+					Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 					Properties info = new Properties();
 					info.put("user", "root");
 					info.put("password", "");
 					
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using oracle driver path 
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using mysql driver path 
 					Statement stmt = conn.createStatement();
 					PreparedStatement pst = conn.prepareStatement("select * from agents where agtfirstname=?");//using prepared object display agent firstname into comboBox
 					String selectedName = (String)cbAgent.getSelectedItem();
@@ -285,6 +296,8 @@ public class AgentFrame extends JFrame {
 				btnCancel.setVisible(true);
 				btnEdit.setVisible(false);
 				txtAgencyID.setVisible(false);
+				cbAgent.setEnabled(false);
+				cbStatus.setEnabled(true);
 				
 			}
 		});
@@ -337,12 +350,12 @@ public class AgentFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try
 				{
-					Class.forName("oracle.jdbc.driver.OracleDriver"); //get connection using oracle database
+					Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 					Properties info = new Properties();
 					info.put("user", "root"); //set username
 					info.put("password", "");//set password
 					
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using oracle driver path
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using mysql driver path
 					String agentId = txtAgentID.getText();
 					String agentFName = txtFirstName.getText();
 					String agentMidini = txtMiddle.getText();
@@ -357,7 +370,7 @@ public class AgentFrame extends JFrame {
 					String updateQuery =  "Update agents set AGENTID='"+agentId+"',AGTFIRSTNAME='"+agentFName+"',AGTMIDDLEINITIAL='"+agentMidini+"',AGTLASTNAME='"+agentLName+"',AGTBUSPHONE='"+agentBusPhone+"',AGTEMAIL='"+agentEMail+"',AGTPOSITION='"+agentPosition+"',AGENCYID='"+agnId+"' where AGENTID='"+agentId+"'";
 					PreparedStatement pst = conn.prepareStatement(updateQuery);
 					pst.execute();
-					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");
+					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");					
 					pst.close();
 				}catch (Exception ex)
 				{
@@ -371,8 +384,12 @@ public class AgentFrame extends JFrame {
 				txtEmail.setEnabled(false);
 				txtPosition.setEnabled(false);
 				btnSave.setEnabled(false);
+				btnEdit.setVisible(true);
 				cbAgencyID.setVisible(false);
 				txtAgencyID.setVisible(true);
+				btnCancel.setVisible(false);
+				cbAgent.setEnabled(true);
+				
 			}
 		});
 		btnSave.setEnabled(false);
@@ -428,13 +445,38 @@ public class AgentFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				btnEdit.setVisible(true);
 				cbAgencyID.setVisible(false);
+				cbAgent.setEnabled(true);
+				cbStatus.setEnabled(false);
 				txtAgencyID.setVisible(true);
+				
+				
 			}
 		});
 		btnCancel.setForeground(new Color(165, 42, 42));
 		btnCancel.setEnabled(true);
 		btnCancel.setBounds(395, 402, 75, 25);
 		contentPane.add(btnCancel);
+		
+		cbStatus = new JComboBox();
+		cbStatus.setEnabled(false);
+		cbStatus.setBounds(376, 67, 85, 22);
+		contentPane.add(cbStatus);
+		
+		JLabel lblStatus = new JLabel("Status");
+		lblStatus.setBounds(334, 70, 41, 16);
+		lblStatus.setForeground(new Color(165, 42, 42));
+		contentPane.add(lblStatus);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AgentFrame.this.dispose(); // returns to main form
+			}
+		});
+		btnBack.setForeground(new Color(165, 42, 42));
+		btnBack.setEnabled(true);
+		btnBack.setBounds(12, 402, 75, 25);
+		contentPane.add(btnBack);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				

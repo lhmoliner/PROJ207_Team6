@@ -1,4 +1,9 @@
 package ui;
+/* 
+ * Coded by:= Joel D'Arnot
+ * ID:000531776
+ *
+ * */
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -169,37 +174,31 @@ public class NewAgentForm extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				try
 				{
-					Class.forName("com.mysql.jdbc.Driver"); //MySql driver
-					
+					Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 					Properties info = new Properties();
-					info.put("user", "root");
-					info.put("password", "");
+					info.put("user", "root"); //set username
+					info.put("password", "");//set password
 					
-					Connection conn = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
-					
-					String inagtFirstName = txtNewFirstName.getText();
-					String inagtMiddle = txtNewMiddle.getText();
-					String inagtLastName = txtNewLastName.getText();
-					String inagtBusPhone = txtNewPhone.getText();
-					String inagtEmail = txtNewEmail.getText();
-					String inagtPosition =txtNewPosition.getText();
-					String inAgencyID = (String)cbAgencyID.getSelectedItem();
-					
-					//insert agent using insertquery
-					String insertQuery =  ("insert into agents (AGTFIRSTNAME, AGTMIDDLEINITIAL, AGTLASTNAME, AGTBUSPHONE, AGTEMAIL, AGTPOSITION, AGENCYID)"
-							+ " values ('"+inagtFirstName+"','"+inagtMiddle+"','"+inagtLastName+"','"+inagtBusPhone+"','"+inagtEmail+"','"+inagtPosition+"','"+inAgencyID+"')");
-					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using mysql driver path
+				//	String agentId = txtNewAgentID.getText();
+					String agentFName = txtNewFirstName.getText();
+					String agentMidini = txtNewMiddle.getText();
+					String agentLName = txtNewLastName.getText();
+					String agentBusPhone = txtNewPhone.getText();
+					String agentEMail = txtNewEmail.getText();
+					String agentPosition =txtNewPosition.getText();
+					String agnId = (String)cbAgencyID.getSelectedItem();
 					
 					
-					
-					pstmt.executeUpdate();
-					JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
-					pstmt.close();
-					
+					//Update data using updatequery
+					String updateQuery =  "Update agents set AGENTID='?',AGTFIRSTNAME='"+agentFName+"',AGTMIDDLEINITIAL='"+agentMidini+"',AGTLASTNAME='"+agentLName+"',AGTBUSPHONE='"+agentBusPhone+"',AGTEMAIL='"+agentEMail+"',AGTPOSITION='"+agentPosition+"',AGENCYID='"+agnId+"' where AGENTID='"+agentId+"'";
+					PreparedStatement pst = conn.prepareStatement(updateQuery);
+					pst.execute();
+					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");
+					LoadData(); // refreshes data after update
+					pst.close();
 				}catch (Exception ex)
 				{
 					System.out.println(ex);
