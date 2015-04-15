@@ -6,6 +6,7 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
@@ -46,6 +47,8 @@ import org.jdatepicker.impl.*;
 import entities.Package;
 
 import java.awt.*;
+import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
 
 
 public class PackageMaintenance extends JFrame {
@@ -147,8 +150,9 @@ public class PackageMaintenance extends JFrame {
 		p1.put("text.year", "Year");
 		JDatePanelImpl datePanel = new JDatePanelImpl(m1,p1);
 		JDatePickerImpl startDate = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+		startDate.getJFormattedTextField().setBorder(new LineBorder(Color.MAGENTA));
 		
-		startDate.getJFormattedTextField().setFont(new Font("Arial", Font.PLAIN, 16));
+		startDate.getJFormattedTextField().setFont(new Font("Tahoma", Font.PLAIN, 13));
 		startDate.setLocation(196, 149);
 		startDate.setSize(new Dimension(200, 23));
 		contentPane.add(startDate);
@@ -160,14 +164,16 @@ public class PackageMaintenance extends JFrame {
 		p2.put("text.year", "Year");
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(m2,p2);
 		JDatePickerImpl endDate = new JDatePickerImpl(datePanel2,new DateLabelFormatter());
+		endDate.getJFormattedTextField().setBorder(new LineBorder(Color.MAGENTA));
 		
-		endDate.getJFormattedTextField().setFont(new Font("Arial", Font.PLAIN, 16));
+		endDate.getJFormattedTextField().setFont(new Font("Tahoma", Font.PLAIN, 13));
 		endDate.setLocation(196, 183);
 		endDate.setSize(new Dimension(200,25));
 		contentPane.add(endDate);
 		// end of JDate
 	
 		cboPackage = new JComboBox(); //creating combo box
+		cboPackage.setBorder(new LineBorder(Color.MAGENTA));
 		cboPackage.setForeground(new Color(165, 42, 42));
 		cboPackage.addActionListener(new ActionListener() { //creating action listner for combo box
 		public void actionPerformed(ActionEvent e) { //Through this action event, connecting to DB and retrieving package name
@@ -196,16 +202,15 @@ public class PackageMaintenance extends JFrame {
 					Date packageStartDate = rs.getDate("PKGSTARTDATE");
 					Date packageEndDate = rs.getDate("PKGENDDATE");
 					String packageDesc = rs.getString("PKGDESC");
-				    String packageBasePrice = rs.getString("PKGBASEPRICE");
-					//double bsprice = rs.getDouble("PKGBASEPRICE");
-					//String packageBasePrice = NumberFormat.getCurrencyInstance().format(bsprice);
+				    //String packageBasePrice = rs.getString("PKGBASEPRICE");
+					double bsprice = rs.getDouble("PKGBASEPRICE");
+					String packageBasePrice = NumberFormat.getCurrencyInstance().format(bsprice);
+				    //double packageBasePrice = Double.parseDouble(txtPkgPrice.getText());
+					//String cmbprice = NumberFormat.getCurrencyInstance().format(packageBasePrice);
+					double agcomm = rs.getDouble("PKGAGENCYCOMMISSION");
+					String packageAgencyCommission = NumberFormat.getCurrencyInstance().format(agcomm) ;
 					
-					//double agcomm = rs.getDouble("PKGAGENCYCOMMISSION");
-					//String packageAgencyCommission = NumberFormat.getCurrencyInstance().format(agcomm) ;
-					
-					String packageAgencyCommission = rs.getString("PKGAGENCYCOMMISSION");
-	
-									
+					//String packageAgencyCommission = rs.getString("PKGAGENCYCOMMISSION");				
 					txtPkgId.setText(pkgId); //displaying DB values into text fields stored already in strings
 					txtPkgName.setText(packageName);
 					//txtPkgStartDate.setText(packageStartDate);
@@ -255,6 +260,7 @@ cboPackage.setBounds(198, 34, 171, 22);
 contentPane.add(cboPackage);
 	
 		txtPkgName = new JTextField();
+		txtPkgName.setBorder(new LineBorder(Color.MAGENTA));
 		txtPkgName.setForeground(new Color(165, 42, 42));
 		txtPkgName.setEnabled(false);
 		txtPkgName.setBounds(198, 113, 200, 22);
@@ -262,6 +268,7 @@ contentPane.add(cboPackage);
 		txtPkgName.setColumns(10);
 		
 		txtPkgDescription = new JTextField();
+		txtPkgDescription.setBorder(new LineBorder(Color.MAGENTA));
 		txtPkgDescription.setForeground(new Color(165, 42, 42));
 		txtPkgDescription.setEnabled(false);
 		txtPkgDescription.setColumns(10);
@@ -269,6 +276,7 @@ contentPane.add(cboPackage);
 		contentPane.add(txtPkgDescription);
 		
 		txtPkgPrice = new JTextField();
+		txtPkgPrice.setBorder(new LineBorder(Color.MAGENTA));
 		txtPkgPrice.setForeground(new Color(165, 42, 42));
 		txtPkgPrice.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtPkgPrice.setEnabled(false);
@@ -276,7 +284,9 @@ contentPane.add(cboPackage);
 		txtPkgPrice.setBounds(198, 261, 200, 22);
 		contentPane.add(txtPkgPrice);
 		
-		btnSave = new JButton("Save");
+		btnSave = new JButton("");
+		btnSave.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\save31 (2).png"));
+		btnSave.setBorder(new LineBorder(Color.MAGENTA));
 		btnSave.setForeground(new Color(165, 42, 42));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) throws NumberFormatException { //method to save record in the DB
@@ -299,6 +309,7 @@ contentPane.add(cboPackage);
 					//String uppkgBasePrice = NumberFormat.getCurrencyInstance().format(upprice);
 					
 					double uppkgBasePrice = Double.parseDouble(txtPkgPrice.getText());
+					String upprice = NumberFormat.getCurrencyInstance().format(uppkgBasePrice);
 					/*int upcomm = Integer.parseInt(txtPackageAgencyCommission.getText());
 					String uppkgAgencyCommission =NumberFormat.getCurrenmcyInstance().format(upcomm) ;*/
 					double uppkgAgencyCommission = Double.parseDouble(txtPkgAgnCommission.getText());
@@ -327,18 +338,22 @@ contentPane.add(cboPackage);
 			}
 		});
 		btnSave.setEnabled(false);
-		btnSave.setBounds(442, 224, 118, 25);
+		btnSave.setBounds(442, 219, 101, 35);
 		contentPane.add(btnSave);
 		
 		
 		
-		btnExit = new JButton("Exit");
+		btnExit = new JButton("");
+		btnExit.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\door9.png"));
+		btnExit.setBorder(new LineBorder(Color.MAGENTA));
 		btnExit.setForeground(new Color(165, 42, 42));
-		btnExit.setBounds(442, 288, 123, 25);
+		btnExit.setBounds(442, 278, 106, 35);
 		contentPane.add(btnExit);
 		btnExit.addActionListener(new ExitListener());
 		
-		btnLoad = new JButton("Click Here for Packages");
+		btnLoad = new JButton("");
+		btnLoad.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\packages2.png"));
+		btnLoad.setBorder(new LineBorder(Color.MAGENTA));
 		btnLoad.setForeground(new Color(165, 42, 42));
 		btnLoad.addActionListener(new ActionListener() {
 			ResultSet rs = null;
@@ -364,8 +379,6 @@ contentPane.add(cboPackage);
 					
 					System.out.println(e1);
 				}
-				
-				
 				btnLoad.setEnabled(true); //disabling load button after retrieving data from DB
 				btnEdit.setEnabled(true); //enabling edit button to make modifications
 				btnAdd.setEnabled(true); //enabling Add button to append new record
@@ -376,7 +389,7 @@ contentPane.add(cboPackage);
 			}
 		});
 		
-		btnLoad.setBounds(410, 33, 175, 25);
+		btnLoad.setBounds(410, 33, 101, 35);
 		contentPane.add(btnLoad);
 		
 		
@@ -386,6 +399,7 @@ contentPane.add(cboPackage);
 		contentPane.add(lblPackageAgencyCommission);
 		
 		txtPkgAgnCommission = new JTextField();
+		txtPkgAgnCommission.setBorder(new LineBorder(Color.MAGENTA));
 		txtPkgAgnCommission.setForeground(new Color(165, 42, 42));
 		txtPkgAgnCommission.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtPkgAgnCommission.setEnabled(false);
@@ -396,6 +410,7 @@ contentPane.add(cboPackage);
 		
 		
 		txtPkgId = new JTextField();
+		txtPkgId.setBorder(new LineBorder(Color.MAGENTA));
 		txtPkgId.setForeground(new Color(165, 42, 42));
 		txtPkgId.setEnabled(false);
 		txtPkgId.setEditable(false);
@@ -411,7 +426,8 @@ contentPane.add(cboPackage);
 		
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(24, 393, 536, 278);
+		scrollPane.setBorder(new LineBorder(Color.MAGENTA));
+		scrollPane.setBounds(29, 393, 531, 278);
 		contentPane.add(scrollPane);
 		
 		table_1 = new JTable();
@@ -427,9 +443,11 @@ contentPane.add(cboPackage);
 		//////////////////////////////////////////
 		
 		
-		btnAdd = new JButton("Add");
+		btnAdd = new JButton("");
+		btnAdd.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\shopping-cart9.png"));
+		btnAdd.setBorder(new LineBorder(Color.MAGENTA));
 		btnAdd.setForeground(new Color(165, 42, 42));
-		btnAdd.setBounds(12, 13, 97, 25);
+		btnAdd.setBounds(12, 7, 97, 38);
 		panel.add(btnAdd);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -459,10 +477,8 @@ contentPane.add(cboPackage);
 					String inpkgBasePrice = txtPkgPrice.getText();
 					String inpkgAgencyCommission =txtPkgAgnCommission.getText();
 					
-					String insertQuery =  ("insert into packages (PKGNAME, PKGSTARTDATE, PKGENDDATE, PKGDESC, PKGBASEPRICE, PKGAGENCYCOMMISSION) values ('"+inpkgName+"','"+inpkgStartDate+"','"+inpkgEndDate+"','"+inpkgDescription+"','"+inpkgBasePrice+"','"+inpkgAgencyCommission+"')");
+					String insertQuery =  ("insert into packages (PACKAGEID,PKGNAME, PKGSTARTDATE, PKGENDDATE, PKGDESC, PKGBASEPRICE, PKGAGENCYCOMMISSION) values (NULL,'"+inpkgName+"','"+inpkgStartDate+"','"+inpkgEndDate+"','"+inpkgDescription+"','"+inpkgBasePrice+"','"+inpkgAgencyCommission+"')");
 					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-					
-					
 					
 					pstmt.executeUpdate();
 					JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
@@ -478,9 +494,11 @@ contentPane.add(cboPackage);
 		});
 		btnAdd.setEnabled(true);
 		
-		btnEdit = new JButton("Edit");
+		btnEdit = new JButton("");
+		btnEdit.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\triangle7.png"));
+		btnEdit.setBorder(new LineBorder(Color.MAGENTA));
 		btnEdit.setForeground(new Color(165, 42, 42));
-		btnEdit.setBounds(143, 13, 97, 25);
+		btnEdit.setBounds(143, 7, 97, 38);
 		panel.add(btnEdit);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -497,9 +515,11 @@ contentPane.add(cboPackage);
 				btnEdit.setEnabled(false);
 
 ///////////////////////////////////////////////////////////////
-btnDelete = new JButton("Delete");
+btnDelete = new JButton("");
+btnDelete.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\rubbish.png"));
+btnDelete.setBorder(new LineBorder(Color.MAGENTA));
 btnDelete.setForeground(new Color(165, 42, 42));
-btnDelete.setBounds(268, 13, 97, 25);
+btnDelete.setBounds(268, 7, 97, 38);
 panel.add(btnDelete);
 btnDelete.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e) {
@@ -543,9 +563,11 @@ btnDelete.addActionListener(new ActionListener() {
 });
 btnDelete.setEnabled(false);
 
-JButton btnClear = new JButton("Clear");
+JButton btnClear = new JButton("");
+btnClear.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\three60.png"));
+btnClear.setBorder(new LineBorder(Color.MAGENTA));
 btnClear.setForeground(new Color(165, 42, 42));
-btnClear.setBounds(394, 13, 97, 25);
+btnClear.setBounds(394, 7, 97, 38);
 panel.add(btnClear);
 btnClear.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent arg0) {
