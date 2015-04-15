@@ -46,9 +46,9 @@ public class AgentFrame extends JFrame {
 	public static JTextField txtEmail;
 	private static JButton btnEdit;
 	private static JButton btnAdd;
+	private static JButton btnSetInactive;
 	public static JComboBox<String> cbAgent;
 	public static JComboBox<String> cbAgencyID;
-	public static JComboBox<String> cbStatus;
 	private static JButton btnSave;
 	private static JButton btnCancel;
 	public static String firstName;
@@ -60,7 +60,6 @@ public class AgentFrame extends JFrame {
 	private JTextField txtAgencyID;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private static String status[];
 	/**
 	 * Launch the application.
 	 */
@@ -70,7 +69,7 @@ public class AgentFrame extends JFrame {
 				try {
 					AgentFrame frame = new AgentFrame();
 					
-					//method call when application is run
+					//method call when application is run					
 					LoadData();
 					frame.setVisible(true);
 					txtFirstName.setEnabled(false);
@@ -78,10 +77,7 @@ public class AgentFrame extends JFrame {
 					txtLastName.setEnabled(false);
 					txtPhone.setEnabled(false);
 					txtEmail.setEnabled(false);
-					txtPosition.setEnabled(false);
-					
-					
-				
+					txtPosition.setEnabled(false);	
 				}
 				 catch (Exception e) {
 					e.printStackTrace();
@@ -297,7 +293,7 @@ public class AgentFrame extends JFrame {
 				btnEdit.setVisible(false);
 				txtAgencyID.setVisible(false);
 				cbAgent.setEnabled(false);
-				cbStatus.setEnabled(true);
+				btnSetInactive.setEnabled(true);
 				
 			}
 		});
@@ -446,7 +442,6 @@ public class AgentFrame extends JFrame {
 				btnEdit.setVisible(true);
 				cbAgencyID.setVisible(false);
 				cbAgent.setEnabled(true);
-				cbStatus.setEnabled(false);
 				txtAgencyID.setVisible(true);
 				
 				
@@ -456,16 +451,6 @@ public class AgentFrame extends JFrame {
 		btnCancel.setEnabled(true);
 		btnCancel.setBounds(395, 402, 75, 25);
 		contentPane.add(btnCancel);
-		
-		cbStatus = new JComboBox();
-		cbStatus.setEnabled(false);
-		cbStatus.setBounds(376, 67, 85, 22);
-		contentPane.add(cbStatus);
-		
-		JLabel lblStatus = new JLabel("Status");
-		lblStatus.setBounds(334, 70, 41, 16);
-		lblStatus.setForeground(new Color(165, 42, 42));
-		contentPane.add(lblStatus);
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
@@ -477,6 +462,26 @@ public class AgentFrame extends JFrame {
 		btnBack.setEnabled(true);
 		btnBack.setBounds(12, 402, 75, 25);
 		contentPane.add(btnBack);
+		
+		btnSetInactive = new JButton("Set Inactive");
+		btnSetInactive.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String message = "Are you sure you want to set this agent to inactive?";
+				String title = "Confirm Inactive";
+				int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+				if (reply == JOptionPane.YES_OPTION)
+				{
+					new TransferCustomersFrame().setVisible(true); // opens Transfer form if selected option was YES
+				}
+				
+				
+			}
+		});
+		btnSetInactive.setForeground(new Color(165, 42, 42));
+		btnSetInactive.setEnabled(false);
+		btnSetInactive.setBounds(338, 66, 123, 25);
+		contentPane.add(btnSetInactive);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				

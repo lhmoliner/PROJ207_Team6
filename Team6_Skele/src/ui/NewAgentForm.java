@@ -53,7 +53,6 @@ public class NewAgentForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoadData();
 					NewAgentForm frame = new NewAgentForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -67,7 +66,7 @@ public class NewAgentForm extends JFrame {
 	{
 		try
 		{
-			Class.forName("com.mysql.jdbc.Driver"); //get connection using oracle database
+			Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
 			Properties info = new Properties();
 			info.put("user", "root");// set username
 			info.put("password", ""); //set password
@@ -193,16 +192,20 @@ public class NewAgentForm extends JFrame {
 					
 					
 					//Update data using updatequery
-					String updateQuery =  "Update agents set AGENTID='?',AGTFIRSTNAME='"+agentFName+"',AGTMIDDLEINITIAL='"+agentMidini+"',AGTLASTNAME='"+agentLName+"',AGTBUSPHONE='"+agentBusPhone+"',AGTEMAIL='"+agentEMail+"',AGTPOSITION='"+agentPosition+"',AGENCYID='"+agnId+"' where AGENTID='"+agentId+"'";
+					String updateQuery =  "INSERT INTO agents "
+							+ "(AGENTID,AGTFIRSTNAME,AGTMIDDLEINITIAL,AGTLASTNAME,AGTBUSPHONE,AGTEMAIL,AGTPOSITION,AGENCYID,AGTSTATUS) "
+							+ "VALUES "
+							+ "(NULL,'"+agentFName+"','"+agentMidini+"','"+agentLName+"','"+agentBusPhone+"','"+agentEMail+"','"+agentPosition+"','"+agnId+"',DEFAULT)";
 					PreparedStatement pst = conn.prepareStatement(updateQuery);
 					pst.execute();
 					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");
-					LoadData(); // refreshes data after update
+				//	LoadData(); // refreshes data after update
 					pst.close();
 				}catch (Exception ex)
 				{
 					System.out.println(ex);
 				}
+				NewAgentForm.this.dispose();
 			}
 		});
 		btnSave.setForeground(new Color(165, 42, 42));
@@ -228,5 +231,6 @@ public class NewAgentForm extends JFrame {
 		cbAgencyID = new JComboBox();
 		cbAgencyID.setBounds(196, 265, 74, 22);
 		panel.add(cbAgencyID);
+		LoadData(); // load data into combobox
 	}
 }
