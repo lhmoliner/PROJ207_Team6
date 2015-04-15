@@ -4,6 +4,7 @@
  * Date: March/23/2015
  * */
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,12 +20,18 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.Vector;
+import java.lang.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DateFormatter;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -33,8 +40,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.SystemColor;
+
+import org.jdatepicker.impl.*;
+
+import entities.Package;
+
+import java.awt.*;
 
 
 public class PackageMaintenance extends JFrame {
@@ -42,12 +53,10 @@ public class PackageMaintenance extends JFrame {
 	private JPanel contentPane; //declaring private variables to use only in this class
 	private JTextField txtPkgId;
 	private JTextField txtPkgName;
-	private JTextField txtPkgStartDate;
-	private JTextField txtPkgEndDate;
 	private JTextField txtPkgDescription;
 	private JTextField txtPkgPrice;
 	private JTextField txtPkgAgnCommission;
-	private JComboBox<String> cboPackage;
+	private static JComboBox<String> cboPackage;
 	private JButton btnLoad;
 	private JButton btnSave;
 	private JButton btnAdd;
@@ -65,6 +74,9 @@ public class PackageMaintenance extends JFrame {
 	private JLabel lblPackageAgencyCommission;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private SqlDateModel m2;
+	private SqlDateModel m1;
+	private JTable table_1;
 	
 	/**
 	 * Launch the application.
@@ -76,9 +88,6 @@ public class PackageMaintenance extends JFrame {
 				try {
 					PackageMaintenance frame = new PackageMaintenance();
 					frame.setVisible(true);
-					
-					
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -130,6 +139,34 @@ public class PackageMaintenance extends JFrame {
 		lblPackageBasePrice.setBounds(29, 251, 118, 30);
 		contentPane.add(lblPackageBasePrice);
 		
+		//JDate
+		m1 = new SqlDateModel();
+		Properties p1 = new Properties();
+		p1.put("text.today", "Today");
+		p1.put("text.month", "Month");
+		p1.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(m1,p1);
+		JDatePickerImpl startDate = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+		
+		startDate.getJFormattedTextField().setFont(new Font("Arial", Font.PLAIN, 16));
+		startDate.setLocation(196, 149);
+		startDate.setSize(new Dimension(200, 23));
+		contentPane.add(startDate);
+		
+		m2 = new SqlDateModel();
+		Properties p2 = new Properties();
+		p2.put("text.today", "Today");
+		p2.put("text.month", "Month");
+		p2.put("text.year", "Year");
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(m2,p2);
+		JDatePickerImpl endDate = new JDatePickerImpl(datePanel2,new DateLabelFormatter());
+		
+		endDate.getJFormattedTextField().setFont(new Font("Arial", Font.PLAIN, 16));
+		endDate.setLocation(196, 183);
+		endDate.setSize(new Dimension(200,25));
+		contentPane.add(endDate);
+		// end of JDate
+	
 		cboPackage = new JComboBox(); //creating combo box
 		cboPackage.setForeground(new Color(165, 42, 42));
 		cboPackage.addActionListener(new ActionListener() { //creating action listner for combo box
@@ -144,29 +181,24 @@ public class PackageMaintenance extends JFrame {
 			info.put("password", ""); //password to connect to DB
 			
 			Connection conn = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
-			
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL		
 			
 			Statement stmt = conn.createStatement();
 			PreparedStatement pstmt = conn.prepareStatement("select * from packages where PkgName=?");//querying the DB
 			String selectedpkgName = (String)cboPackage.getSelectedItem(); //Passing packages names to combo box string
 			
 			pstmt.setString(1, selectedpkgName);
-			
-			
-				  
-			
 			ResultSet rs = pstmt.executeQuery(); //Execute query is for the select statement to get the data from DB
 			while (rs.next())
 				{
 					String pkgId = rs.getString("PACKAGEID"); //storing values from DB to strings 
 					String packageName = rs.getString("PKGNAME");
-					String packageStartDate = rs.getString("PKGSTARTDATE");
-					String packageEndDate = rs.getString("PKGENDDATE");
+					Date packageStartDate = rs.getDate("PKGSTARTDATE");
+					Date packageEndDate = rs.getDate("PKGENDDATE");
 					String packageDesc = rs.getString("PKGDESC");
-					//String packageBasePrice = rs.getString("PKGBASEPRICE");
-					double bsprice = rs.getDouble("PKGBASEPRICE");
-					String packageBasePrice = NumberFormat.getCurrencyInstance().format(bsprice);
+				    String packageBasePrice = rs.getString("PKGBASEPRICE");
+					//double bsprice = rs.getDouble("PKGBASEPRICE");
+					//String packageBasePrice = NumberFormat.getCurrencyInstance().format(bsprice);
 					
 					//double agcomm = rs.getDouble("PKGAGENCYCOMMISSION");
 					//String packageAgencyCommission = NumberFormat.getCurrencyInstance().format(agcomm) ;
@@ -176,31 +208,28 @@ public class PackageMaintenance extends JFrame {
 									
 					txtPkgId.setText(pkgId); //displaying DB values into text fields stored already in strings
 					txtPkgName.setText(packageName);
-					txtPkgStartDate.setText(packageStartDate);
-					txtPkgEndDate.setText(packageEndDate);
+					//txtPkgStartDate.setText(packageStartDate);
+					//txtPkgEndDate.setText(packageEndDate);
+					m1.setValue(packageStartDate);
+					m2.setValue(packageEndDate);
 					txtPkgDescription.setText(packageDesc);
 					txtPkgPrice.setText(packageBasePrice);
 					txtPkgAgnCommission.setText(packageAgencyCommission);
 					
-					
-					/*pkg = new Package();
-					pkg.setPkgId(rs.getInt("PackageId"));
-					pkg.setPackageName(rs.getString("PkgName"));
-					pkg.setStartDate(startDate);*/
 					Statement st;
 					Vector data = new Vector();
 
 					Vector columnNames = new Vector();
 					columnNames.addElement("Products Name");
 					columnNames.addElement("Supplier Name");
-					table = new JTable(data,columnNames);
+					table_1 = new JTable(data,columnNames);
 					
-					scrollPane.setViewportView(table);
+					scrollPane.setViewportView(table_1);
 					
 
 					st = conn.createStatement();
 					
-				    ResultSet res = st.executeQuery("select p.prodname, s.supname from Suppliers s join Products_Suppliers ps on s.SupplierId=ps.SupplierId join Products p on p.ProductId=ps.ProductId");
+				    ResultSet res = st.executeQuery("select distinct p.prodname, s.supname from Suppliers s join Products_Suppliers ps on s.SupplierId=ps.SupplierId join Products p on p.ProductId=ps.ProductId");
 				    ResultSetMetaData metaData = res.getMetaData();
 				    int columns = metaData.getColumnCount();
 				    while (res.next()) {
@@ -212,7 +241,7 @@ public class PackageMaintenance extends JFrame {
 				    }
 				}
 			
-		}catch (ClassNotFoundException | SQLException e1) //catching the exceptions for above catch
+		}catch (SQLException | ClassNotFoundException e1) //catching the exceptions for above catch
 		{
 			System.out.println(e1);
 						e1.printStackTrace();
@@ -220,35 +249,17 @@ public class PackageMaintenance extends JFrame {
 		}
 		
 	}
-});
+   });
 cboPackage.setEnabled(true); //disabling the combo box
 cboPackage.setBounds(198, 34, 171, 22);
 contentPane.add(cboPackage);
-
-
-
-
-				
+	
 		txtPkgName = new JTextField();
 		txtPkgName.setForeground(new Color(165, 42, 42));
 		txtPkgName.setEnabled(false);
 		txtPkgName.setBounds(198, 113, 200, 22);
 		contentPane.add(txtPkgName);
 		txtPkgName.setColumns(10);
-		
-		txtPkgStartDate = new JTextField();
-		txtPkgStartDate.setForeground(new Color(165, 42, 42));
-		txtPkgStartDate.setEnabled(false);
-		txtPkgStartDate.setColumns(10);
-		txtPkgStartDate.setBounds(198, 152, 200, 22);
-		contentPane.add(txtPkgStartDate);
-		
-		txtPkgEndDate = new JTextField();
-		txtPkgEndDate.setForeground(new Color(165, 42, 42));
-		txtPkgEndDate.setEnabled(false);
-		txtPkgEndDate.setColumns(10);
-		txtPkgEndDate.setBounds(198, 188, 200, 22);
-		contentPane.add(txtPkgEndDate);
 		
 		txtPkgDescription = new JTextField();
 		txtPkgDescription.setForeground(new Color(165, 42, 42));
@@ -268,8 +279,6 @@ contentPane.add(cboPackage);
 		btnSave = new JButton("Save");
 		btnSave.setForeground(new Color(165, 42, 42));
 		btnSave.addActionListener(new ActionListener() {
-			
-			
 			public void actionPerformed(ActionEvent e) throws NumberFormatException { //method to save record in the DB
 				try
 				{
@@ -283,18 +292,16 @@ contentPane.add(cboPackage);
 					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
 					String uppackageId = txtPkgId.getText();
 					String uppkgName = txtPkgName.getText();
-					String uppkgStartDate = txtPkgStartDate.getText();
-					String uppkgEndDate = txtPkgEndDate.getText();
+					Date uppkgStartDate = (Date)startDate.getModel().getValue();
+					Date uppkgEndDate = (Date)endDate.getModel().getValue();
 					String uppkgDescription = txtPkgDescription.getText();
 					//int upprice = Integer.parseInt(txtPackageBasePrice.getText());
 					//String uppkgBasePrice = NumberFormat.getCurrencyInstance().format(upprice);
-					String uppkgBasePrice = txtPkgPrice.getText();
+					
+					double uppkgBasePrice = Double.parseDouble(txtPkgPrice.getText());
 					/*int upcomm = Integer.parseInt(txtPackageAgencyCommission.getText());
 					String uppkgAgencyCommission =NumberFormat.getCurrenmcyInstance().format(upcomm) ;*/
-					String uppkgAgencyCommission = txtPkgAgnCommission.getText();
-					
-					
-					
+					double uppkgAgencyCommission = Double.parseDouble(txtPkgAgnCommission.getText());
 					
 					String updateQuery =  "Update packages set PACKAGEID='"+uppackageId+"',PKGNAME='"+uppkgName+"',PKGSTARTDATE='"+uppkgStartDate+"',PKGENDDATE='"+uppkgEndDate+"',PKGDESC='"+uppkgDescription+"',PKGBASEPRICE='"+uppkgBasePrice+"',PKGAGENCYCOMMISSION='"+uppkgAgencyCommission+"' where PACKAGEID='"+uppackageId+"'";
 					//PACKAGEID='"+uppackageId
@@ -302,15 +309,15 @@ contentPane.add(cboPackage);
 					pstmt.execute();
 					JOptionPane.showMessageDialog(null,"Data Updated Successfully!"); //displaying message window for action performed
 					pstmt.close();
-				}catch (ClassNotFoundException | NumberFormatException | SQLException ex)
+				}catch (NumberFormatException | SQLException | ClassNotFoundException ex)
 				{
 					
 					System.out.println(ex);
 					ex.printStackTrace();
 				}
 				txtPkgName.setEnabled(false);
-				txtPkgStartDate.setEnabled(false);
-				txtPkgEndDate.setEnabled(false);
+				startDate.setEnabled(false);
+				endDate.setEnabled(false);
 				txtPkgDescription.setEnabled(false);
 				txtPkgPrice.setEnabled(false);
 				txtPkgAgnCommission.setEnabled(false);
@@ -335,9 +342,7 @@ contentPane.add(cboPackage);
 		btnLoad.setForeground(new Color(165, 42, 42));
 		btnLoad.addActionListener(new ActionListener() {
 			ResultSet rs = null;
-			
 			public void actionPerformed(ActionEvent e) { //method to load data from database with reference to package name
-				
 				try 
 				{
 					Class.forName("com.mysql.jdbc.Driver"); //MySql driver
@@ -345,18 +350,16 @@ contentPane.add(cboPackage);
 					info.put("user", "root");
 					info.put("password", "");
 					
-					Connection conn = 
-							DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
 					Statement stmt = conn.createStatement();
 					rs = stmt.executeQuery("select * from packages");
 					while (rs.next())
 					{
 						pkgName = rs.getString("PKGNAME");
-						
 						cboPackage.addItem(pkgName);			
 					}
 					pkgName = (String)cboPackage.getSelectedItem();
-				} catch (ClassNotFoundException | SQLException e1) 
+				} catch (SQLException | ClassNotFoundException e1) 
 				{
 					
 					System.out.println(e1);
@@ -411,6 +414,10 @@ contentPane.add(cboPackage);
 		scrollPane.setBounds(24, 393, 536, 278);
 		contentPane.add(scrollPane);
 		
+		table_1 = new JTable();
+		table_1.setBounds(24,393,536,278);
+		scrollPane.setViewportView(table_1);
+		
 		JPanel panel = new JPanel();
 		panel.setBounds(29, 326, 526, 51);
 		contentPane.add(panel);
@@ -427,8 +434,8 @@ contentPane.add(cboPackage);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				txtPkgName.setEnabled(true); //enabling the text fields to do add
-				txtPkgStartDate.setEnabled(true);
-				txtPkgEndDate.setEnabled(true);
+				startDate.setEnabled(true);
+				endDate.setEnabled(true);
 				txtPkgDescription.setEnabled(true);
 				txtPkgPrice.setEnabled(true);
 				txtPkgAgnCommission.setEnabled(true);
@@ -446,8 +453,8 @@ contentPane.add(cboPackage);
 					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
 					
 					String inpkgName = txtPkgName.getText();
-					String inpkgStartDate = txtPkgStartDate.getText();
-					String inpkgEndDate = txtPkgEndDate.getText();
+					Date inpkgStartDate = (Date)startDate.getModel().getValue();
+					Date inpkgEndDate = (Date)endDate.getModel().getValue();
 					String inpkgDescription = txtPkgDescription.getText();
 					String inpkgBasePrice = txtPkgPrice.getText();
 					String inpkgAgencyCommission =txtPkgAgnCommission.getText();
@@ -478,20 +485,16 @@ contentPane.add(cboPackage);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtPkgName.setEnabled(true); //enabling the text fields to do edit
-				txtPkgStartDate.setEnabled(true);
-				txtPkgEndDate.setEnabled(true);
+				startDate.setEnabled(true);
+				endDate.setEnabled(true);
 				txtPkgDescription.setEnabled(true);
 				txtPkgPrice.setEnabled(true);
 				txtPkgAgnCommission.setEnabled(true);
 				btnSave.setEnabled(true); //enabling SAVE button after edit
-			}
-					});
+				}
+			});
 		
-
-btnEdit.setEnabled(false);
-
-
-
+				btnEdit.setEnabled(false);
 
 ///////////////////////////////////////////////////////////////
 btnDelete = new JButton("Delete");
@@ -501,8 +504,8 @@ panel.add(btnDelete);
 btnDelete.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e) {
 		txtPkgName.setEnabled(true); //enabling the text fields to do delete
-		txtPkgStartDate.setEnabled(true);
-		txtPkgEndDate.setEnabled(true);
+		startDate.setEnabled(true);
+		endDate.setEnabled(true);
 		txtPkgDescription.setEnabled(true);
 		txtPkgPrice.setEnabled(true);
 		txtPkgAgnCommission.setEnabled(true);
@@ -548,9 +551,9 @@ btnClear.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent arg0) {
 		txtPkgId.setText("");
 		txtPkgName.setText("");
+		startDate.getModel().setValue(null);
+		endDate.getModel().setValue(null);
 		txtPkgDescription.setText("");
-		txtPkgStartDate.setText("");
-		txtPkgEndDate.setText("");
 		txtPkgPrice.setText("");
 		txtPkgAgnCommission.setText("");
 		
@@ -559,10 +562,34 @@ btnClear.addActionListener(new ActionListener() {
 	}
 });
 btnClear.setEnabled(true);
-		
-		
-		
-		}
 	}
+
+ public class DateLabelFormatter extends AbstractFormatter 
+{
+	
+	private String datePattern = "yyyy-MM-dd";
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	
+	@Override
+	public java.lang.Object stringToValue(String text)throws ParseException 
+	{
+		// TODO Auto-generated method stub
+		return dateFormatter.parseObject(text);
+	}
+	
+	@Override
+	public String valueToString(java.lang.Object value)
+			throws ParseException {
+		// TODO Auto-generated method stub
+		if(value !=null)
+		{
+			Calendar cal = (Calendar)value;
+			return dateFormatter.format(cal.getTime());
+		}
+		return "";
+	}
+}
+		}
+	
 
 
