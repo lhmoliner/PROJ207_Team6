@@ -47,6 +47,7 @@ import org.jdatepicker.impl.*;
 import entities.Package;
 
 import java.awt.*;
+
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 
@@ -197,21 +198,19 @@ public class PackageMaintenance extends JFrame {
 			ResultSet rs = pstmt.executeQuery(); //Execute query is for the select statement to get the data from DB
 			while (rs.next())
 				{
-					String pkgId = rs.getString("PACKAGEID"); //storing values from DB to strings 
+					int pkgId = rs.getInt("PACKAGEID"); //storing values from DB to strings 
 					String packageName = rs.getString("PKGNAME");
 					Date packageStartDate = rs.getDate("PKGSTARTDATE");
 					Date packageEndDate = rs.getDate("PKGENDDATE");
 					String packageDesc = rs.getString("PKGDESC");
-				    //String packageBasePrice = rs.getString("PKGBASEPRICE");
 					double bsprice = rs.getDouble("PKGBASEPRICE");
-					String packageBasePrice = NumberFormat.getCurrencyInstance().format(bsprice);
-				    //double packageBasePrice = Double.parseDouble(txtPkgPrice.getText());
-					//String cmbprice = NumberFormat.getCurrencyInstance().format(packageBasePrice);
+					DecimalFormat df = new DecimalFormat("#.00");
+					String packageBasePrice = df.format(bsprice);
 					double agcomm = rs.getDouble("PKGAGENCYCOMMISSION");
-					String packageAgencyCommission = NumberFormat.getCurrencyInstance().format(agcomm) ;
-					
-					//String packageAgencyCommission = rs.getString("PKGAGENCYCOMMISSION");				
-					txtPkgId.setText(pkgId); //displaying DB values into text fields stored already in strings
+					DecimalFormat df1 = new DecimalFormat("#.00");
+					String packageAgencyCommission =  df1.format(agcomm) ;
+									
+					txtPkgId.setText(String.valueOf(pkgId)); //displaying DB values into text fields stored already in strings
 					txtPkgName.setText(packageName);
 					//txtPkgStartDate.setText(packageStartDate);
 					//txtPkgEndDate.setText(packageEndDate);
@@ -305,20 +304,33 @@ contentPane.add(cboPackage);
 					Date uppkgStartDate = (Date)startDate.getModel().getValue();
 					Date uppkgEndDate = (Date)endDate.getModel().getValue();
 					String uppkgDescription = txtPkgDescription.getText();
-					//int upprice = Integer.parseInt(txtPackageBasePrice.getText());
-					//String uppkgBasePrice = NumberFormat.getCurrencyInstance().format(upprice);
-					
 					double uppkgBasePrice = Double.parseDouble(txtPkgPrice.getText());
-					String upprice = NumberFormat.getCurrencyInstance().format(uppkgBasePrice);
-					/*int upcomm = Integer.parseInt(txtPackageAgencyCommission.getText());
-					String uppkgAgencyCommission =NumberFormat.getCurrenmcyInstance().format(upcomm) ;*/
-					double uppkgAgencyCommission = Double.parseDouble(txtPkgAgnCommission.getText());
+					DecimalFormat df = new DecimalFormat("#.00");
+					String upprice = df.format(uppkgBasePrice);
 					
-					String updateQuery =  "Update packages set PACKAGEID='"+uppackageId+"',PKGNAME='"+uppkgName+"',PKGSTARTDATE='"+uppkgStartDate+"',PKGENDDATE='"+uppkgEndDate+"',PKGDESC='"+uppkgDescription+"',PKGBASEPRICE='"+uppkgBasePrice+"',PKGAGENCYCOMMISSION='"+uppkgAgencyCommission+"' where PACKAGEID='"+uppackageId+"'";
-					//PACKAGEID='"+uppackageId
+					double uppkgAgencyCommission = Double.parseDouble(txtPkgAgnCommission.getText()); 
+					DecimalFormat df1 = new DecimalFormat("#.00");
+					String uppAgncom =df1.format(uppkgBasePrice) ;
+					
+					String updateQuery =  "Update packages set PKGNAME='"+uppkgName+"',PKGSTARTDATE='"+uppkgStartDate+"',PKGENDDATE='"+uppkgEndDate+"',PKGDESC='"+uppkgDescription+"',PKGBASEPRICE='"+uppkgBasePrice+"',PKGAGENCYCOMMISSION='"+uppkgAgencyCommission+"' where PACKAGEID='"+uppackageId+"'";
 					PreparedStatement pstmt = conn.prepareStatement(updateQuery);
 					pstmt.execute();
+					if(uppkgBasePrice > uppkgAgencyCommission)
+					{
 					JOptionPane.showMessageDialog(null,"Data Updated Successfully!"); //displaying message window for action performed
+					txtPkgName.setEnabled(false);
+					startDate.setEnabled(false);
+					endDate.setEnabled(false);
+					txtPkgDescription.setEnabled(false);
+					txtPkgPrice.setEnabled(false);
+					txtPkgAgnCommission.setEnabled(false);
+					
+					btnSave.setEnabled(false);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Agency Commission never Higher then Base Price");
+					}
 					pstmt.close();
 				}catch (NumberFormatException | SQLException | ClassNotFoundException ex)
 				{
@@ -326,15 +338,6 @@ contentPane.add(cboPackage);
 					System.out.println(ex);
 					ex.printStackTrace();
 				}
-				txtPkgName.setEnabled(false);
-				startDate.setEnabled(false);
-				endDate.setEnabled(false);
-				txtPkgDescription.setEnabled(false);
-				txtPkgPrice.setEnabled(false);
-				txtPkgAgnCommission.setEnabled(false);
-				
-				btnSave.setEnabled(false);
-				
 			}
 		});
 		btnSave.setEnabled(false);
@@ -385,7 +388,6 @@ contentPane.add(cboPackage);
 				btnDelete.setEnabled(true); //enabling Delete button to delete records
 				
 				cboPackage.setEnabled(true);
-			
 			}
 		});
 		
@@ -458,7 +460,6 @@ contentPane.add(cboPackage);
 				txtPkgPrice.setEnabled(true);
 				txtPkgAgnCommission.setEnabled(true);
 				btnSave.setEnabled(true); //enabling SAVE button after edit
-				
 				try
 				{
 					Class.forName("com.mysql.jdbc.Driver"); //MySql driver
@@ -471,28 +472,39 @@ contentPane.add(cboPackage);
 					DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //Connection string MySQL
 					
 					String inpkgName = txtPkgName.getText();
+					//String inpkgStartDate = (String)startDate.getModel().getValue();
 					Date inpkgStartDate = (Date)startDate.getModel().getValue();
 					Date inpkgEndDate = (Date)endDate.getModel().getValue();
 					String inpkgDescription = txtPkgDescription.getText();
-					String inpkgBasePrice = txtPkgPrice.getText();
-					String inpkgAgencyCommission =txtPkgAgnCommission.getText();
+					double inpkgBasePrice = (Double.valueOf(txtPkgPrice.getText()));
+					double inpkgAgencyCommission = (Double.valueOf(txtPkgAgnCommission.getText()));
 					
-					String insertQuery =  ("insert into packages (PACKAGEID,PKGNAME, PKGSTARTDATE, PKGENDDATE, PKGDESC, PKGBASEPRICE, PKGAGENCYCOMMISSION) values (NULL,'"+inpkgName+"','"+inpkgStartDate+"','"+inpkgEndDate+"','"+inpkgDescription+"','"+inpkgBasePrice+"','"+inpkgAgencyCommission+"')");
+					//String insertQuery =  ("insert into packages (PACKAGEID,PKGNAME, PKGSTARTDATE, PKGENDDATE, PKGDESC, PKGBASEPRICE, PKGAGENCYCOMMISSION) values (NULL,'"+inpkgName+"','"+inpkgStartDate+"','"+inpkgEndDate+"','"+inpkgDescription+"','"+inpkgBasePrice+"','"+inpkgAgencyCommission+"')");
+					String insertQuery = ("insert into packages(PackageId,PkgName,PkgStartDate,PkgEndDate,PkgDesc,PkgBasePrice,PkgAgencyCommission) values(NULL,?,?,?,?,?,?)");
 					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-					
+					pstmt.setString(1, inpkgName);
+					pstmt.setDate(2, inpkgStartDate);
+					pstmt.setDate(3, inpkgEndDate);
+					pstmt.setString(4, inpkgDescription);
+					pstmt.setDouble(5, inpkgBasePrice);
+					pstmt.setDouble(6, inpkgAgencyCommission);
 					pstmt.executeUpdate();
-					JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
+					if(inpkgBasePrice > inpkgAgencyCommission)
+					{
+						JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
+						btnAdd.setEnabled(true);
+					}	
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Agency Commission Never Higher Then Base Price!!!!"); //displaying message window for action performed
+					}
 					pstmt.close();
 				}catch (Exception ex)
 				{
 					System.out.println(ex);
 				}
-				
-				
-				
 			}
 		});
-		btnAdd.setEnabled(true);
 		
 		btnEdit = new JButton("");
 		btnEdit.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\triangle7.png"));
