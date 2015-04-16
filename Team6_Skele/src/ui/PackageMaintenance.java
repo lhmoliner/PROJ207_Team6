@@ -315,21 +315,22 @@ contentPane.add(cboPackage);
 					String updateQuery =  "Update packages set PKGNAME='"+uppkgName+"',PKGSTARTDATE='"+uppkgStartDate+"',PKGENDDATE='"+uppkgEndDate+"',PKGDESC='"+uppkgDescription+"',PKGBASEPRICE='"+uppkgBasePrice+"',PKGAGENCYCOMMISSION='"+uppkgAgencyCommission+"' where PACKAGEID='"+uppackageId+"'";
 					PreparedStatement pstmt = conn.prepareStatement(updateQuery);
 					pstmt.execute();
-					if(uppkgBasePrice > uppkgAgencyCommission)
+					//when AgencyCommission, Package Name and Package Description not work at that it shows error message 
+					if(uppkgBasePrice > uppkgAgencyCommission && !(uppkgName.isEmpty()) || (!(uppkgDescription.isEmpty())))
 					{
-					JOptionPane.showMessageDialog(null,"Data Updated Successfully!"); //displaying message window for action performed
-					txtPkgName.setEnabled(false);
-					startDate.setEnabled(false);
-					endDate.setEnabled(false);
-					txtPkgDescription.setEnabled(false);
-					txtPkgPrice.setEnabled(false);
-					txtPkgAgnCommission.setEnabled(false);
-					
-					btnSave.setEnabled(false);
+						JOptionPane.showMessageDialog(null,"Data Updated Successfully!"); //displaying message window for action performed
+						txtPkgName.setEnabled(false);
+						startDate.setEnabled(false);
+						endDate.setEnabled(false);
+						txtPkgDescription.setEnabled(false);
+						txtPkgPrice.setEnabled(false);
+						txtPkgAgnCommission.setEnabled(false);
+						btnSave.setEnabled(false);
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(null,"Agency Commission never Higher then Base Price");
+						JOptionPane.showMessageDialog(null,"Agency Commission never Higher then Base Price"+ "\n "+
+					                                   "OR May be" +"\n"+ "Package Name and Paackage Desciption can not be left Blank");
 					}
 					pstmt.close();
 				}catch (NumberFormatException | SQLException | ClassNotFoundException ex)
@@ -482,21 +483,23 @@ contentPane.add(cboPackage);
 					//String insertQuery =  ("insert into packages (PACKAGEID,PKGNAME, PKGSTARTDATE, PKGENDDATE, PKGDESC, PKGBASEPRICE, PKGAGENCYCOMMISSION) values (NULL,'"+inpkgName+"','"+inpkgStartDate+"','"+inpkgEndDate+"','"+inpkgDescription+"','"+inpkgBasePrice+"','"+inpkgAgencyCommission+"')");
 					String insertQuery = ("insert into packages(PackageId,PkgName,PkgStartDate,PkgEndDate,PkgDesc,PkgBasePrice,PkgAgencyCommission) values(NULL,?,?,?,?,?,?)");
 					PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-					pstmt.setString(1, inpkgName);
-					pstmt.setDate(2, inpkgStartDate);
-					pstmt.setDate(3, inpkgEndDate);
-					pstmt.setString(4, inpkgDescription);
-					pstmt.setDouble(5, inpkgBasePrice);
-					pstmt.setDouble(6, inpkgAgencyCommission);
-					pstmt.executeUpdate();
-					if(inpkgBasePrice > inpkgAgencyCommission)
+					
+					//if BasePrice is lower then Agency commission it shows error message
+					if(inpkgBasePrice > inpkgAgencyCommission && !(inpkgName.isEmpty()) || (!(inpkgDescription.isEmpty())))
 					{
+						pstmt.setString(1, inpkgName);
+						pstmt.setDate(2, inpkgStartDate);
+						pstmt.setDate(3, inpkgEndDate);
+						pstmt.setString(4, inpkgDescription);
+						pstmt.setDouble(5, inpkgBasePrice);
+						pstmt.setDouble(6, inpkgAgencyCommission);
+						pstmt.executeUpdate();
 						JOptionPane.showMessageDialog(null,"Data Inserted Successfully!"); //displaying message window for action performed
 						btnAdd.setEnabled(true);
 					}	
 					else
 					{
-						JOptionPane.showMessageDialog(null,"Agency Commission Never Higher Then Base Price!!!!"); //displaying message window for action performed
+						JOptionPane.showMessageDialog(null,"Agency Commission Never Higher Then Base Price!!!! or Package Name and Package Description can not be null"); //displaying message window for action performed
 					}
 					pstmt.close();
 				}catch (Exception ex)
