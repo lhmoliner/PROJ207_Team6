@@ -1,3 +1,4 @@
+package ui;
 /*Project Workshop CMPP264 Java - Team 6
  * Instructor: Harvey Peters
  * Created by: Megha Patel(000679647)
@@ -44,7 +45,7 @@ import javax.swing.SwingConstants;
 
 import org.jdatepicker.impl.*;
 
-import entities.Package;
+//import entities.Package;
 
 import java.awt.*;
 
@@ -284,7 +285,7 @@ contentPane.add(cboPackage);
 		contentPane.add(txtPkgPrice);
 		
 		btnSave = new JButton("");
-		btnSave.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\save31 (2).png"));
+		btnSave.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\save31 (2).png"));
 		btnSave.setBorder(new LineBorder(Color.MAGENTA));
 		btnSave.setForeground(new Color(165, 42, 42));
 		btnSave.addActionListener(new ActionListener() {
@@ -348,15 +349,19 @@ contentPane.add(cboPackage);
 		
 		
 		btnExit = new JButton("");
-		btnExit.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\door9.png"));
+		btnExit.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\door9.png"));
 		btnExit.setBorder(new LineBorder(Color.MAGENTA));
 		btnExit.setForeground(new Color(165, 42, 42));
 		btnExit.setBounds(442, 278, 106, 35);
 		contentPane.add(btnExit);
-		btnExit.addActionListener(new ExitListener());
+		btnExit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				PackageMaintenance.this.dispose();
+			}
+		});
 		
 		btnLoad = new JButton("");
-		btnLoad.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\packages2.png"));
+		btnLoad.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\packages2.png"));
 		btnLoad.setBorder(new LineBorder(Color.MAGENTA));
 		btnLoad.setForeground(new Color(165, 42, 42));
 		btnLoad.addActionListener(new ActionListener() {
@@ -447,7 +452,7 @@ contentPane.add(cboPackage);
 		
 		
 		btnAdd = new JButton("");
-		btnAdd.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\shopping-cart9.png"));
+		btnAdd.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\shopping-cart9.png"));
 		btnAdd.setBorder(new LineBorder(Color.MAGENTA));
 		btnAdd.setForeground(new Color(165, 42, 42));
 		btnAdd.setBounds(12, 7, 97, 38);
@@ -510,7 +515,7 @@ contentPane.add(cboPackage);
 		});
 		
 		btnEdit = new JButton("");
-		btnEdit.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\triangle7.png"));
+		btnEdit.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\triangle7.png"));
 		btnEdit.setBorder(new LineBorder(Color.MAGENTA));
 		btnEdit.setForeground(new Color(165, 42, 42));
 		btnEdit.setBounds(143, 7, 97, 38);
@@ -531,7 +536,7 @@ contentPane.add(cboPackage);
 
 ///////////////////////////////////////////////////////////////
 btnDelete = new JButton("");
-btnDelete.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\rubbish.png"));
+btnDelete.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\rubbish.png"));
 btnDelete.setBorder(new LineBorder(Color.MAGENTA));
 btnDelete.setForeground(new Color(165, 42, 42));
 btnDelete.setBounds(268, 7, 97, 38);
@@ -579,7 +584,7 @@ btnDelete.addActionListener(new ActionListener() {
 btnDelete.setEnabled(false);
 
 JButton btnClear = new JButton("");
-btnClear.setIcon(new ImageIcon("C:\\Users\\679647\\Downloads\\three60.png"));
+btnClear.setIcon(new ImageIcon("C:\\Users\\Joel\\workspace\\PROJ207_Team6\\images\\three60.png"));
 btnClear.setBorder(new LineBorder(Color.MAGENTA));
 btnClear.setForeground(new Color(165, 42, 42));
 btnClear.setBounds(394, 7, 97, 38);

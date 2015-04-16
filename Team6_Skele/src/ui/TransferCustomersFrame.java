@@ -33,6 +33,9 @@ public class TransferCustomersFrame extends JFrame {
 	private static String rs;
 	private static String firstName;
 	private static String lastName;
+	private JTable table_1;
+	private JScrollPane scrollPane_1;
+	private JButton btnLoad;
 
 	/**
 	 * Launch the application.
@@ -57,7 +60,7 @@ public class TransferCustomersFrame extends JFrame {
 	public TransferCustomersFrame() {
 		setTitle("Transfer Customers");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 441, 380);
+		setBounds(100, 100, 420, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,27 +76,34 @@ public class TransferCustomersFrame extends JFrame {
 		contentPane.add(txtInactiveAgent);
 		txtInactiveAgent.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 82, 295, 211);
-		contentPane.add(scrollPane);
-		
 		lblSelect = new JLabel("Select an agent to transfer customers to:");
-		lblSelect.setBounds(10, 53, 289, 23);
+		lblSelect.setBounds(10, 53, 243, 23);
 		contentPane.add(lblSelect);
 		
 		JButton btnTransfer = new JButton("Transfer");
-		btnTransfer.setBounds(317, 82, 81, 25);
+		btnTransfer.setBounds(288, 52, 105, 25);
 		contentPane.add(btnTransfer);
 		
 		JButton button = new JButton("Save");
 		button.setForeground(new Color(165, 42, 42));
-		button.setBounds(317, 268, 75, 25);
+		button.setBounds(318, 297, 75, 25);
 		contentPane.add(button);
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setForeground(new Color(165, 42, 42));
 		btnCancel.setBounds(10, 297, 75, 25);
 		contentPane.add(btnCancel);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 89, 383, 201);
+		contentPane.add(scrollPane_1);
+		
+		table_1 = new JTable();
+		scrollPane_1.setViewportView(table_1);
+		
+		btnLoad = new JButton("Load");
+		btnLoad.setBounds(312, 9, 81, 25);
+		contentPane.add(btnLoad);
 	}
 	
 	public static void getAgents()
@@ -109,23 +119,7 @@ public class TransferCustomersFrame extends JFrame {
 			Statement stmt = conn.createStatement();
 			ResultSet res = stmt.executeQuery("SELECT AGENTID, AGTFIRSTNAME, AGTLASTNAME FROM Agents"); 
 			ResultSetMetaData metaData = res.getMetaData();
-			int columns = metaData.getColumnCount();
-			
-			Vector data = new Vector();
-			Vector columnNames = new Vector();
-			columnNames.addElement("Agent ID");
-			columnNames.addElement("First Name");
-			columnNames.addElement("Last Name");
-			table = new JTable(data,columnNames);
-			scrollPane.setViewportView(table);						
-			
-		    while (res.next()) {
-		       Vector row = new Vector(columns);
-		       for (int i = 1; i <= columns; i++) {
-		        row.addElement(res.getObject(i));
-		       }
-		       data.addElement(row);
-		    }
+						
 		} catch (ClassNotFoundException | SQLException ex) 
 		{
 			// TODO Auto-generated catch block
