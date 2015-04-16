@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -209,7 +211,6 @@ public class AgentFrame extends JFrame {
 					info.put("password", "");
 					
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts", info); //take data using mysql driver path 
-					Statement stmt = conn.createStatement();
 					PreparedStatement pst = conn.prepareStatement("select * from agents where agtfirstname=?");//using prepared object display agent firstname into comboBox
 					String selectedName = (String)cbAgent.getSelectedItem();
 					String [] names = selectedName.split(" "); //using split() matches argument with database
@@ -344,6 +345,7 @@ public class AgentFrame extends JFrame {
 		btnSave.setForeground(new Color(165, 42, 42));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				try
 				{
 					Class.forName("com.mysql.jdbc.Driver"); //get connection using mysql database
@@ -360,31 +362,47 @@ public class AgentFrame extends JFrame {
 					String agentEMail = txtEmail.getText();
 					String agentPosition =txtPosition.getText();
 					String agnId = (String)cbAgencyID.getSelectedItem();
-					
-					
+
 					//Update data using updatequery
 					String updateQuery =  "Update agents set AGENTID='"+agentId+"',AGTFIRSTNAME='"+agentFName+"',AGTMIDDLEINITIAL='"+agentMidini+"',AGTLASTNAME='"+agentLName+"',AGTBUSPHONE='"+agentBusPhone+"',AGTEMAIL='"+agentEMail+"',AGTPOSITION='"+agentPosition+"',AGENCYID='"+agnId+"' where AGENTID='"+agentId+"'";
 					PreparedStatement pst = conn.prepareStatement(updateQuery);
 					pst.execute();
-					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");					
+					// runs through validations
+					if (((agentFName.isEmpty())) || (agentLName.isEmpty()))
+					{
+						JOptionPane.showMessageDialog(null, "First and Last names are required");		
+					}
+					Pattern pattern = Pattern.compile("^\\(\\d{3}\\) ?\\d{3}( |-)?\\d{4}|^\\d{3}( |-)?\\d{3}( |-)?\\d{4}");
+					Matcher matcher = pattern.matcher(txtPhone.getText());
+					if(!(matcher.matches()))
+					{
+						JOptionPane.showMessageDialog(null, "Invalid phone number");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Your's Data is Updated!");				
+						//when click on save button it's automatic setenabled false all the textfield
+						txtFirstName.setEnabled(false);
+						txtMiddle.setEnabled(false);
+						txtLastName.setEnabled(false);
+						txtPhone.setEnabled(false);
+						txtEmail.setEnabled(false);
+						txtPosition.setEnabled(false);
+						btnSave.setEnabled(false);
+						btnEdit.setVisible(true);
+						cbAgencyID.setVisible(false);
+						txtAgencyID.setVisible(true);
+						btnCancel.setVisible(false);
+						cbAgent.setEnabled(true);
+						
+					}
 					pst.close();
+					
 				}catch (Exception ex)
 				{
 					System.out.println(ex);
 				}
-				//when click on save button it's automatic setenabled false all the textfield
-				txtFirstName.setEnabled(false);
-				txtMiddle.setEnabled(false);
-				txtLastName.setEnabled(false);
-				txtPhone.setEnabled(false);
-				txtEmail.setEnabled(false);
-				txtPosition.setEnabled(false);
-				btnSave.setEnabled(false);
-				btnEdit.setVisible(true);
-				cbAgencyID.setVisible(false);
-				txtAgencyID.setVisible(true);
-				btnCancel.setVisible(false);
-				cbAgent.setEnabled(true);
+
 				
 			}
 		});
@@ -443,6 +461,19 @@ public class AgentFrame extends JFrame {
 				cbAgencyID.setVisible(false);
 				cbAgent.setEnabled(true);
 				txtAgencyID.setVisible(true);
+				
+				txtFirstName.setEnabled(false);
+				txtMiddle.setEnabled(false);
+				txtLastName.setEnabled(false);
+				txtPhone.setEnabled(false);
+				txtEmail.setEnabled(false);
+				txtPosition.setEnabled(false);
+				btnSave.setEnabled(false);
+				btnEdit.setVisible(true);
+				cbAgencyID.setVisible(false);
+				txtAgencyID.setVisible(true);
+				btnCancel.setVisible(false);
+				cbAgent.setEnabled(true);
 				
 				
 			}

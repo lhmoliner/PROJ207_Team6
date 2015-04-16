@@ -20,6 +20,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.*;
+
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -30,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.regex.*;
 
 public class NewAgentForm extends JFrame {
 
@@ -197,15 +200,32 @@ public class NewAgentForm extends JFrame {
 							+ "VALUES "
 							+ "(NULL,'"+agentFName+"','"+agentMidini+"','"+agentLName+"','"+agentBusPhone+"','"+agentEMail+"','"+agentPosition+"','"+agnId+"',DEFAULT)";
 					PreparedStatement pst = conn.prepareStatement(updateQuery);
-					pst.execute();
-					JOptionPane.showMessageDialog(null,"Your's Data is Updated!");
-				//	LoadData(); // refreshes data after update
-					pst.close();
+					
+					// validating fields
+					if (((agentFName.isEmpty())) || (agentLName.isEmpty()))
+					{					
+						JOptionPane.showMessageDialog(null, "First and Last names are required");
+					}
+					Pattern pattern = Pattern.compile("^\\(\\d{3}\\) ?\\d{3}( |-)?\\d{4}|^\\d{3}( |-)?\\d{3}( |-)?\\d{4}");
+					Matcher matcher = pattern.matcher(txtNewPhone.getText());
+					if(!(matcher.matches()))
+					{
+						JOptionPane.showMessageDialog(null, "Invalid phone number");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Your's Data is Updated!");
+						NewAgentForm.this.dispose();
+						// only executes and closes if everything validated properly
+						pst.execute();
+						pst.close();
+					}
+
 				}catch (Exception ex)
 				{
 					System.out.println(ex);
 				}
-				NewAgentForm.this.dispose();
+				
 			}
 		});
 		btnSave.setForeground(new Color(165, 42, 42));
